@@ -30,7 +30,11 @@ function RegisterForm() {
         await updateProfile(user, { displayName: name });
         await createUserInFirestore(user.uid, user.email || "", "member");
 
-        // Appel API backend pour Stripe Checkout
+        // Redirection directe vers /main
+        router.push("/main");
+
+        /*
+        // Ancienne logique Stripe Checkout
         const response = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -44,6 +48,7 @@ function RegisterForm() {
         } else {
           router.push("/profile");
         }
+        */
       }
     } catch (err: any) {
       setError(err.message);
@@ -58,10 +63,13 @@ function RegisterForm() {
       const user = result.user;
 
       if (user) {
-        // Créer utilisateur Firestore si nouveau
         await createUserInFirestore(user.uid, user.email || "", "member");
 
-        // Redirige vers Stripe abonnement
+        // Redirection directe vers /main
+        router.push("/main");
+
+        /*
+        // Ancienne logique Stripe Checkout
         const response = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,6 +83,7 @@ function RegisterForm() {
         } else {
           router.push("/profile");
         }
+        */
       }
     } catch (err: any) {
       setError(err.message);
@@ -138,7 +147,6 @@ function RegisterForm() {
   );
 }
 
-// Loading fallback component
 function LoadingFallback() {
   return (
     <div className="flex justify-center items-center h-32">
