@@ -6,6 +6,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-04-30.basil",
 });
 
+if (!process.env.MY_API_KEY) {
+  throw new Error("MY_API_KEY is not defined");
+}
+
+
 export const POST = async (req: Request) => {
   try {
     const { uid, email } = await req.json();

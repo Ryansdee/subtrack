@@ -8,8 +8,11 @@ import {
 } from "firebase/auth";
 import { auth, createUserInFirestore } from "@/lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
+export const dynamic = "force-dynamic";
+
 
 export default function RegisterPage() {
+  
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
