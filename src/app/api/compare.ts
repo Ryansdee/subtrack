@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { TextServiceClient } from "@google-ai/generativelanguage";
+import { TextServiceClient } from "@google-ai/generativelanguage/build/src/v1beta2";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log("Requête reçue !");
