@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -10,9 +10,7 @@ import { auth, createUserInFirestore } from "@/lib/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 export const dynamic = "force-dynamic";
 
-
-export default function RegisterPage() {
-  
+function RegisterForm() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -84,60 +82,77 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <form
-        onSubmit={handleRegister}
-        className="bg-white p-8 rounded-xl shadow-md w-full max-w-md"
+    <form
+      onSubmit={handleRegister}
+      className="bg-white p-8 rounded-xl shadow-md w-full max-w-md"
+    >
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">Inscription</h1>
+
+      <label className="block mb-2 text-sm font-medium text-gray-700">Nom</label>
+      <input
+        type="text"
+        className="mb-4 w-full p-2 border border-gray-300 rounded"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+
+      <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+      <input
+        type="email"
+        className="mb-4 w-full p-2 border border-gray-300 rounded"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+
+      <label className="block mb-2 text-sm font-medium text-gray-700">Mot de passe</label>
+      <input
+        type="password"
+        className="mb-4 w-full p-2 border border-gray-300 rounded"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+
+      {error && <p className="mb-4 text-red-600">{error}</p>}
+
+      <button
+        type="submit"
+        className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition mb-4"
       >
-        <h1 className="text-2xl font-bold mb-6 text-gray-900">Inscription</h1>
+        S'inscrire
+      </button>
 
-        <label className="block mb-2 text-sm font-medium text-gray-700">Nom</label>
-        <input
-          type="text"
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
-        <input
-          type="email"
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <label className="block mb-2 text-sm font-medium text-gray-700">Mot de passe</label>
-        <input
-          type="password"
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        {error && <p className="mb-4 text-red-600">{error}</p>}
-
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition mb-4"
-        >
-          S’inscrire
-        </button>
-
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
-        >
-          S’inscrire avec Google
-        </button>
+      <button
+        type="button"
+        onClick={handleGoogleSignIn}
+        className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
+      >
+        S'inscrire avec Google
+      </button>
       {errorParam === "abonnement" && (
         <p className="text-red-500">Vous devez souscrire à un abonnement pour continuer.</p>
       )}
-      </form>
+    </form>
+  );
+}
+
+// Loading fallback component
+function LoadingFallback() {
+  return (
+    <div className="flex justify-center items-center h-32">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600"></div>
+    </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <Suspense fallback={<LoadingFallback />}>
+        <RegisterForm />
+      </Suspense>
     </div>
   );
 }
