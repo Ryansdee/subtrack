@@ -13,4 +13,9 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
+const client = new TextServiceClient({
+  // Tu peux passer la clé ici si la lib le supporte
+  apiKey: process.env.GOOGLE_API_KEY,
+});
+
 export default eslintConfig;
