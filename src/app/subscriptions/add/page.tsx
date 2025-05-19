@@ -12,6 +12,7 @@ export default function AddSubscriptionPage() {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [billingDate, setBillingDate] = useState(""); // ✅ date de prélèvement
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ export default function AddSubscriptionPage() {
       await addDoc(collection(db, "users", user.uid, "subscriptions"), {
         name,
         price: parseFloat(price),
+        billingDate, // ✅ ajout de la date de prélèvement
         createdAt: serverTimestamp(),
       });
 
@@ -46,6 +48,7 @@ export default function AddSubscriptionPage() {
             className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
           />
         </div>
+
         <div>
           <label className="block font-medium text-indigo-700">Prix mensuel (€)</label>
           <input
@@ -56,6 +59,18 @@ export default function AddSubscriptionPage() {
             className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
           />
         </div>
+
+        <div>
+          <label className="block font-medium text-indigo-700">Date de prélèvement</label>
+          <input
+            type="date"
+            value={billingDate}
+            onChange={(e) => setBillingDate(e.target.value)}
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+          />
+        </div>
+
         <button
           type="submit"
           className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"

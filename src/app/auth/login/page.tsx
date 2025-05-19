@@ -16,7 +16,7 @@ export default function LoginPage() {
     setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/profile");
+      router.push("/main");
     } catch (err: any) {
       setError(err.message);
     }
@@ -27,7 +27,7 @@ export default function LoginPage() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      router.push("/profile");
+      router.push("/main");
     } catch (err: any) {
       setError(err.message);
     }
