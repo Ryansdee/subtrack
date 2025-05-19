@@ -1,37 +1,19 @@
-// src/app/checkout/processing/page.tsx
-"use client";
+"use client"; // si vous utilisez des hooks client
 
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function CheckoutProcessing() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const sessionId = params.get("session_id");
+function ProcessingContent() {
+  const searchParams = useSearchParams();
+  const param = searchParams.get("votreParam");
 
-  useEffect(() => {
-    const verifySubscription = async () => {
-      if (!sessionId) return;
+  return <div>Paramètre reçu : {param}</div>;
+}
 
-      const res = await fetch("/api/verify-subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId }),
-      });
-
-      if (res.ok) {
-        router.push("/profile");
-      } else {
-        router.push("/profile");
-      }
-    };
-
-    verifySubscription();
-  }, [sessionId]);
-
+export default function Page() {
   return (
-    <div className="min-h-screen flex justify-center items-center text-lg">
-      Vérification de votre abonnement...
-    </div>
+    <Suspense fallback={<div>Chargement...</div>}>
+      <ProcessingContent />
+    </Suspense>
   );
 }
