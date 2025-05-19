@@ -3,8 +3,13 @@
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 
+interface AuthContextType {
+  name: string;
+  updateName: (newName: string) => void;
+}
+
 export default function Settings() {
-  const { name, updateName } = useAuth();
+  const { name, updateName } = useAuth() as AuthContextType;
   const [newName, setNewName] = useState(name);
   const [isCancelling, setIsCancelling] = useState(false);
 

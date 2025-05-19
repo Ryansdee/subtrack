@@ -13,6 +13,20 @@ interface Subscription {
   price: number;
 }
 
+interface AuthContextType {
+  user: any | null;
+  loading?: boolean;
+  getToken: () => Promise<string | null>;
+}
+
+declare module "../../context/AuthContext" {
+  export function useAuth(): Partial<AuthContextType>;
+}
+
+interface User {
+  uid: string;
+}
+
 export default function MainPage() {
   const { user, loading } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);

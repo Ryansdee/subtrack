@@ -40,6 +40,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+
 export function useAuth() {
   return useContext(AuthContext) ?? { user: null, getToken: () => Promise.resolve(null) };
 }

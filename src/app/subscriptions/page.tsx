@@ -14,7 +14,7 @@ interface Subscription {
 }
 
 export default function SubscriptionsPage() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loadingSubs, setLoadingSubs] = useState(true);
 

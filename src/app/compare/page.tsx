@@ -10,7 +10,7 @@ export default function ComparePage() {
   const { user, getToken } = useAuth();
 
   const handleCompare = async () => {
-    if (!user) return;
+    if (!user || !getToken) return;
 
     const token = await getToken();
     setLoading(true);

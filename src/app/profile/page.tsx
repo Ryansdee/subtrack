@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { User } from "firebase/auth";
 
 interface Subscription {
   id: string;
@@ -13,8 +14,14 @@ interface Subscription {
   price: number;
 }
 
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  name: string | null;
+}
+
 export default function Dashboard() {
-  const { user, loading, name } = useAuth();
+  const { user, loading, name } = useAuth() as AuthContextType;
   const router = useRouter();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loadingSubs, setLoadingSubs] = useState(true);
