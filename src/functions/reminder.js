@@ -1,24 +1,38 @@
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
-const serviceAccount = require("./serviceAccountKey.json"); // ta clé Firebase Admin SDK
+require('dotenv').config({ path: '.env.local' });
+
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+    universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
+  }),
 });
+
 const db = admin.firestore();
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "ryan.deschuyteneer@gmail.com",
-    pass: "thqo oyad vwnu mvbz", // <-- celui que tu viens de générer
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
 });
 
 async function sendTestEmail() {
   await transporter.sendMail({
-    from: '"Subtrack" <ryan.deschuyteneer@gmail.com>',
-    to: "desch.ryann@gmail.com", // remplace par ton adresse
+    from: `"Subtrack" <${process.env.MAIL_USER}>`,
+    to: process.env.TEST_EMAIL,
     subject: "✅ Test de l’envoi d’e-mail avec Nodemailer",
     text: "Ceci est un e-mail de test pour vérifier que tout fonctionne bien !",
   });
@@ -43,7 +57,7 @@ async function sendReminders() {
     const billingDate = new Date(data.billingDate);
     if (billingDate.getDate() === day && billingDate.getMonth() + 1 === month) {
       await transporter.sendMail({
-        from: '"Subtrack" <ryan.deschuyteneer@gmail.com>',
+        from: `"Subtrack" <${process.env.MAIL_USER}>`,
         to: data.userEmail,
         subject: `Rappel : Votre abonnement ${data.name} sera prélevé bientôt`,
         text: `Bonjour, votre abonnement ${data.name} de ${data.price}€ sera prélevé le ${data.billingDate}.`,
@@ -55,4 +69,3 @@ async function sendReminders() {
 
 sendReminders().catch(console.error);
 sendTestEmail().catch(console.error);
-
