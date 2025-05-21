@@ -56,12 +56,6 @@ export default function LandingPage() {
               </button>
             </Link>
           </div>
-          <Link href="/compare">
-            <button className="inline-flex items-center gap-2 rounded-full bg-indigo-500 text-white px-6 py-3 font-semibold shadow hover:bg-indigo-600 transition">
-              <ChatBubbleLeftEllipsisIcon className="w-6 h-6" />
-              Essayez la comparaison intelligente
-            </button>
-          </Link>
         </div>
         <div className="w-full max-w-lg">
           <img
